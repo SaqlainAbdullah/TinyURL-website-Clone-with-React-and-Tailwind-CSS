@@ -22,7 +22,7 @@ const App = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(`${API_BASE}/shorten`, {
+      const res = await axios.post(`${API_BASE}/save`, {
         longUrl,
         alias,
       });

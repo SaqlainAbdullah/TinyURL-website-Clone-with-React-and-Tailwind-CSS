@@ -73,64 +73,90 @@ const App = () => {
       <main className="flex w-full px-[5vw] py-[5vh]">
         {/* Left Section - Form */}
         <div className="left w-[35%] bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4 h-[60vh]">
-          {/* Shorten URL Box */}
-          <FaLink className="text-black" />
-          <h2 className="font-bold text-medium">Shorten a long URL</h2>
-          <input
-            type="text"
-            placeholder="Enter long link here"
-            value={longUrl}
-            onChange={(e) => setLongUrl(e.target.value)}
-            className="border rounded px-3 py-2 w-full outline-none"
-          />
+          {!shortUrl ? (
+            <>
+              {/* Shorten URL Box */}
+              <FaLink className="text-black" />
+              <h2 className="font-bold text-medium">Shorten a long URL</h2>
+              <input
+                type="text"
+                placeholder="Enter long link here"
+                value={longUrl}
+                onChange={(e) => setLongUrl(e.target.value)}
+                className="border rounded px-3 py-2 w-full outline-none"
+              />
 
-          {/* Customize link */}
-          <FaWandMagicSparkles />
-          <h2 className="font-medium text-lg mt-2">Customize your link</h2>
-          <div className="flex gap-2">
-            <select className="border rounded px-3 py-2 w-1/2 outline-none">
-              <option>tinyurl.com</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Enter alias"
-              value={alias}
-              onChange={(e) => setAlias(e.target.value)}
-              className="border rounded px-3 py-2 w-1/2 outline-none"
-            />
-          </div>
+              {/* Customize link */}
+              <FaWandMagicSparkles />
+              <h2 className="font-medium text-lg mt-2">Customize your link</h2>
+              <div className="flex gap-2">
+                <select className="border rounded px-3 py-2 w-1/2 outline-none">
+                  <option>tinyurl.com</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Enter alias"
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
+                  className="border rounded px-3 py-2 w-1/2 outline-none"
+                />
+              </div>
 
-          {/* Shorten URL Button */}
-          <button
-            onClick={handleShorten}
-            disabled={loading}
-            className="bg-gray-400 text-white py-4 rounded mt-2 cursor-pointer text-lg"
-          >
-            {loading ? "Shortening..." : "Shorten URL"}
-          </button>
-
-          {/* Show shortened link */}
-          {shortUrl && (
-            <div className="mt-3 text-sm">
-              ✅ Short URL:{" "}
-              <a
-                href={shortUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
+              {/* Shorten URL Button */}
+              <button
+                onClick={handleShorten}
+                disabled={loading}
+                className="bg-gray-400 text-white py-4 rounded mt-2 cursor-pointer text-lg"
               >
-                {shortUrl}
-              </a>
-            </div>
-          )}
+                {loading ? "Shortening..." : "Shorten URL"}
+              </button>
 
-          {/* Terms */}
-          <p className="text-xs text-gray-600 mt-2">
-            By clicking Shorten URL, I agree to the{" "}
-            <span className="underline">Terms of Service</span>,{" "}
-            <span className="underline">Privacy Policy</span> and{" "}
-            <span className="underline">Use of Cookies</span>.
-          </p>
+              {/* Terms */}
+              <p className="text-xs text-gray-600 mt-2">
+                By clicking Shorten URL, I agree to the{" "}
+                <span className="underline">Terms of Service</span>,{" "}
+                <span className="underline">Privacy Policy</span> and{" "}
+                <span className="underline">Use of Cookies</span>.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="font-bold text-lg">Your Shortened URL</h2>
+              <input
+                type="text"
+                value={shortUrl}
+                readOnly
+                className="border rounded px-3 py-2 w-full outline-none bg-gray-100"
+              />
+
+              <div className="flex gap-3 mt-2">
+                <button
+                  onClick={() => navigator.clipboard.writeText(shortUrl)}
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  Copy
+                </button>
+                <a
+                  href={shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Open
+                </a>
+                <button
+                  onClick={() => {
+                    setShortUrl(""); // reset UI
+                    setLongUrl("");
+                    setAlias("");
+                  }}
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                >
+                  Shorten Another
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Right Section - Content */}

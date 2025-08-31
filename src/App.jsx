@@ -15,7 +15,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   // 🔗 Replace this later with your Railway backend URL
-  const API_BASE = "http://localhost:5000/api";
+  const API_BASE = "https://tinyurl-backend-production.up.railway.app/url";
 
   const handleShorten = async () => {
     if (!longUrl) return alert("Please enter a URL");

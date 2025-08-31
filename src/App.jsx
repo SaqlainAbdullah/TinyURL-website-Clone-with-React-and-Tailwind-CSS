@@ -5,8 +5,37 @@ import { IoTrendingUpOutline } from "react-icons/io5";
 import { FaGlobe } from "react-icons/fa";
 import { IoIosLink } from "react-icons/io";
 import { MdShare } from "react-icons/md";
+import { useState } from "react";
+import axios from "axios";
 
 const App = () => {
+  const [longUrl, setLongUrl] = useState("");
+  const [alias, setAlias] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // 🔗 Replace this later with your Railway backend URL
+  const API_BASE = "http://localhost:5000/api";
+
+  const handleShorten = async () => {
+    if (!longUrl) return alert("Please enter a URL");
+
+    try {
+      setLoading(true);
+      const res = await axios.post(`${API_BASE}/shorten`, {
+        longUrl,
+        alias,
+      });
+
+      setShortUrl(res.data.shortUrl);
+    } catch (err) {
+      console.error(err);
+      alert("Error shortening URL");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <nav className="flex w-full h-[10vh] justify-between items-center px-[3vw] mb-4 sticky top-0">
@@ -50,6 +79,8 @@ const App = () => {
           <input
             type="text"
             placeholder="Enter long link here"
+            value={longUrl}
+            onChange={(e) => setLongUrl(e.target.value)}
             className="border rounded px-3 py-2 w-full outline-none"
           />
 
@@ -63,14 +94,35 @@ const App = () => {
             <input
               type="text"
               placeholder="Enter alias"
+              value={alias}
+              onChange={(e) => setAlias(e.target.value)}
               className="border rounded px-3 py-2 w-1/2 outline-none"
             />
           </div>
 
           {/* Shorten URL Button */}
-          <button className="bg-gray-400 text-white py-4 rounded mt-2 cursor-pointer text-lg">
-            Shorten URL
+          <button
+            onClick={handleShorten}
+            disabled={loading}
+            className="bg-gray-400 text-white py-4 rounded mt-2 cursor-pointer text-lg"
+          >
+            {loading ? "Shortening..." : "Shorten URL"}
           </button>
+
+          {/* Show shortened link */}
+          {shortUrl && (
+            <div className="mt-3 text-sm">
+              ✅ Short URL:{" "}
+              <a
+                href={shortUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {shortUrl}
+              </a>
+            </div>
+          )}
 
           {/* Terms */}
           <p className="text-xs text-gray-600 mt-2">
